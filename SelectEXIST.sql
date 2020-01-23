@@ -25,12 +25,30 @@ WHERE DEPT_NO IN(SELECT DEPT_NO
                FROM EMPLE
                WHERE COMISION_PCT>SALARIO*0.1);
                
+SELECT LOC
+FROM DEPART
+WHERE EXISTS(SELECT DEPT_NO
+            FROM EMPLE
+            WHERE COMISION_PCT>(SALARIO*0.1));
+               
 --4
 /*Escribir una consulta para mostrar los apellidos de los empleados que 
 tengan uno o más compañeros de trabajo en sus departamentos con fechas 
-de contratación posteriores paro salarios más altos. */
+de contratación posteriores pero salarios más altos. */
+SELECT E.APELLIDO
+FROM EMPLE E
+WHERE EXISTS(SELECT EMP.APELLIDO
+            FROM EMPLE EMP
+            WHERE E.SALARIO<EMP.SALARIO
+            AND
+            E.FECHA_ALTA>EMP.FECHA_ALTA);
 
-
+--5
+/*Buscar los departamentos que no tengan empleados. Hazlo de dos formas.*/
+SELECT DEPT_NO
+FROM DEPART
+WHERE EXISTS (SELECT APELLIDO, DEPT_NO
+                 FROM  EMPLE);
 
 
 
