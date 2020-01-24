@@ -39,5 +39,10 @@ de los empleados que pertenecen a cada uno de ellos. Si algún departamento
 está vacío, mostrar ausencia de valor NULL.*/
 SELECT D.DEPT_NO, D.DNOMBRE, E.APELLIDO
 FROM EMPLE E, DEPART D
-WHERE E.DEPT_NO=D.DEPT_NO(+);
+WHERE E.DEPT_NO(+)=D.DEPT_NO;
+
+--EL CODIGO 40 NO APARECE DE ESTA FORMA, SI NO NULL
+SELECT E.DEPT_NO, D.DNOMBRE, E.APELLIDO
+FROM EMPLE E, DEPART D
+WHERE E.DEPT_NO(+)=D.DEPT_NO;
 

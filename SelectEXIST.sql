@@ -37,18 +37,21 @@ tengan uno o más compañeros de trabajo en sus departamentos con fechas
 de contratación posteriores pero salarios más altos. */
 SELECT E.APELLIDO
 FROM EMPLE E
-WHERE EXISTS(SELECT EMP.APELLIDO
-            FROM EMPLE EMP
-            WHERE E.SALARIO<EMP.SALARIO
+WHERE EXISTS(SELECT 'X'
+            FROM EMPLE C
+            WHERE E.DEPT_NO=C.DEPT_NO--QUITAR FILAS PARA QUEDARME SU DEPARTAMENTO 
             AND
-            E.FECHA_ALTA>EMP.FECHA_ALTA);
+            E.SALARIO<C.SALARIO
+            AND
+            C.FECHA_ALTA>E.FECHA_ALTA);
 
 --5
 /*Buscar los departamentos que no tengan empleados. Hazlo de dos formas.*/
 SELECT DEPT_NO
-FROM DEPART
-WHERE EXISTS (SELECT APELLIDO, DEPT_NO
-                 FROM  EMPLE);
+FROM DEPART D
+WHERE NOT EXISTS (SELECT 'X'
+                 FROM  EMPLE
+                 WHERE DET_NO=D.DEPT_NO);
 
 
 
