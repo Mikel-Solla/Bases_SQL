@@ -74,31 +74,37 @@ HAVING AVG(SALARIO) IN (SELECT MIN(AVG(SALARIO))
                         GROUP BY OFICIO);
 
 --7
-/*    7. ¿Qué es incorrecto en esta sentencia?
+/*    7. ¿Qué es incorrecto en esta sentencia?*/
 SELECT EMP_NO, APELLIDO
 FROM EMPLE
-WHERE SALARIO = ( SELECT MIN(SALARIO))
+WHERE SALARIO IN ( SELECT MIN(SALARIO)
 				FROM EMPLE
-				GROUP BY DEPT_NO);*/
+				GROUP BY DEPT_NO);
+--TIENE UN PARENTESIS MAL COLOCADO Y NECESITA UN 'IN' EN VEZ DE '='
 
 
 --8
 /*     ¿Qué ocurre con la siguiente sentencia?
+¿Qué ocurriría si existiera un oficio con valor nulo?*/
 SELECT APELLIDO, OFICIO
 FROM EMPLE
 WHERE OFICIO = ( SELECT OFICIO
 			FROM EMPLE
 			WHERE APELLIDO = 'PEREZ');
-       ¿Qué ocurriría si existiera un oficio con valor nulo?*/
+       
 
 
 --9
 /*Mostrar los apellidos de los empleados que no tienen subordinados.*/
-
+SELECT APELLIDO
+FROM EMPLE
+WHERE ID_JEFE IS NOT NULL;
 
 --10
 /*Mostrar los apellidos de los empleados que tienen subordinados.*/
-
+SELECT APELLIDO
+FROM EMPLE
+WHERE ID_JEFE IS NULL;
 
 --11
 /*Escribir una consulta para mostrar los códigos de empleado y los apellidos de todos los
