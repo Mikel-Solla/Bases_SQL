@@ -1,0 +1,147 @@
+--1 
+/*Crea una tabla que sea igual que la tabla DEPART denominada DEPARTSEQ*/
+DROP TABLE DEPARTSEQ;
+CREATE TABLE DEPARTSEQ AS (
+SELECT * FROM DEPART
+);
+
+DESC DEPART;
+SELECT C.CONSTRAINT_NAME, C.CONSTRAINT_TYPE, CC.COLUMN_NAME 
+FROM USER_CONSTRAINTS C, USER_CONS_COLUMNS CC
+WHERE UPPER(C.TABLE_NAME)='DEPART'
+AND
+C.CONSTRAINT_NAME=CC.CONSTRAINT_NAME;
+
+DESC DEPARTSEQ;
+SELECT C.CONSTRAINT_NAME, C.CONSTRAINT_TYPE, CC.COLUMN_NAME 
+FROM USER_CONSTRAINTS C, USER_CONS_COLUMNS CC
+WHERE UPPER(C.TABLE_NAME)='DEPARTSEQ'
+AND
+C.CONSTRAINT_NAME=CC.CONSTRAINT_NAME;
+
+SELECT * FROM DEPARTSEQ;
+
+--2
+/*Crea una secuencia para utilizarla con la columna de clave primaria de 
+la tabla DEPARTSEQ. La secuencia debe comenzar en 200 y tener un valor 
+máximo de 1000. Haz que la secuencia aumente en diez números cada vez. 
+Asigna a la secuencia el nombre DEPT_ID_SEQ. Comprueba en el diccionario 
+de datos que el objeto se ha creado correctamente.*/
+DROP SEQUENCE DEPT_ID_SEQ;
+CREATE SEQUENCE DEPT_ID_SEQ
+START WITH 200
+MAXVALUE 1000
+INCREMENT BY 10
+NOCYCLE
+NOCACHE;
+
+DESC USER_SEQUENCES
+
+SELECT SEQUENCE_NAME
+FROM USER_SEQUENCES;
+
+--3
+/*Consulta en el diccionario de datos acerca de tus secuencias.
+Obtén la siguiente información: nombre de secuencia, valor máximo,
+tamaño de aumento y último número. */
+DESC USER_SEQUENCES;
+
+SELECT SEQUENCE_NAME, MAX_VALUE, INCREMENT_BY, LAST_NUMBER
+FROM USER_SEQUENCES;
+
+--4
+/*Escribe un archivo de comandos para insertar dos filas en la tabla
+DEPARTASEQ. Asigna al archivo de comandos el nombre lab9_4.sql.
+Asegúrate de utilizar la secuencia que creaste anteriormente para
+la columna ID. Agrega dos departamentos llamados Educacion
+y Administracion. Ejecuta el script. Confirma las inserciones. */
+
+--ESTA EN lab9_4.sql
+
+--5
+/*Comprueba cual será el siguiente número de departamento, 
+que dará la secuencia que has creado, al realizar la siguiente inserción.*/
+SELECT DEPT_ID_SEQ.NEXTVAL
+FROM DUAL;
+/*AÑADIR UN NUEVO DEPARTAMENTO CON LA SEQUENCIA RECIEN CREADA*/
+INSERT INTO DEPARTSEQ VALUES 
+(DEPT_ID_SEQ.CURRVAL, 'MOLANO', 'MIRANDA');
+
+SELECT * FROM DEPARTSEQ
+WHERE UPPER(DNOMBRE)='MOLANO';
+
+--ROLLBACK Y COMPROBACION
+ROLLBACK;
+SELECT * FROM DEPARTSEQ;
+
+--6
+/*Crear la tabla CENTROS teniendo en cuenta este modelo y 
+que el modelo físico se va a implementar en 
+un SGBD Oracle 12c:*/
+DROP TABLE CENTROS;
+
+CREATE TABLE CENTROS (
+ID NUMBER(2) GENERATED ALWAYS AS IDENTITY 
+            MINVALUE 1 
+            MAXVALUE 99 
+            INCREMENT BY 1 
+            START WITH 1 
+            NOCYCLE 
+            NOCACHE,
+NOMBRE VARCHAR2(30) NOT NULL,
+CALLE VARCHAR2(30),
+NUMERO NUMBER(2),
+CP VARCHAR2(5),
+CIUDAD VARCHAR2(15),
+PROVINCIA VARCHAR2(40),
+TELEFONO VARCHAR2(9),
+CONSTRAINT CENTROS_ID_PK PRIMARY KEY (ID)
+);
+--PASOS PARA LA COMPROBACION DE TABLA
+--1.COMPROBAR QUE ESTA EN EL DICCIONARIO
+DESC USER_TABLES;
+
+SELECT TABLE_NAME
+FROM USER_TABLES
+WHERE UPPER(TABLE_NAME)='CENTROS';
+
+--2.COMPROBAR LAS COLUMNAS DE LA TABLA
+DESC CENTROS;
+
+--PASO PARA COMPROBAR LA RESTRICCIONES
+DESC USER_CONSTRAINTS;
+DESC USER_CONS_COLUMNS;
+
+SELECT C.CONSTRAINT_NAME, 
+C.CONSTRAINT_TYPE, C.TABLE_NAME, CC.COLUMN_NAME,
+C.GENERATED
+FROM USER_CONSTRAINTS C, USER_CONS_COLUMNS CC
+WHERE C.CONSTRAINT_NAME=CC.CONSTRAINT_NAME --JOIN
+AND
+UPPER(C.TABLE_NAME)='CENTROS';
+
+--SACAR EL NOMBRE DE LA SEQUENCIA DE ID('ISEQ$$_328325')
+SELECT TABLE_NAME, COLUMN_NAME, DATA_DEFAULT FROM USER_TAB_COLUMNS
+WHERE TABLE_NAME='CENTROS';
+
+SELECT LAST_NUMBER, INCREMENT_BY,MIN_VALUE, MAX_VALUE
+FROM USER_SEQUENCES
+WHERE SEQUENCE_NAME='ISEQ$$_328325';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
